@@ -30,6 +30,24 @@ resource "aws_security_group" "sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # DNS - TCP
+  ingress {
+    description = "DNS TCP"
+    from_port   = 53
+    to_port     = 53
+    protocol    = "tcp"
+    cidr_blocks = ["11.0.0.0/16"]
+  }
+
+  # DNS - UDP
+  ingress {
+    description = "DNS UDP"
+    from_port   = 53
+    to_port     = 53
+    protocol    = "udp"
+    cidr_blocks = ["11.0.0.0/16"]
+  }
+
   # Outbound
   egress {
     description = "Allow all outbound traffic"
