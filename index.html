@@ -1,0 +1,1569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Consistency — Build Better Habits</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0b0b12;
+            --card: rgba(255,255,255,0.06);
+            --card-hover: rgba(255,255,255,0.09);
+            --border: rgba(255,255,255,0.10);
+            --text: #f5f5f7;
+            --muted: #9696a8;
+            --purple: #8b5cf6;
+            --purple-light: #a78bfa;
+            --green: #22c55e;
+            --yellow: #facc15;
+            --red: #ef4444;
+            --blue: #3b82f6;
+        }
+
+        body.light {
+            --bg: #f5f5fa;
+            --card: rgba(255,255,255,0.8);
+            --card-hover: rgba(255,255,255,1);
+            --border: rgba(0,0,0,0.08);
+            --text: #171722;
+            --muted: #666677;
+        }
+
+        body {
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+                "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(139,92,246,.20), transparent 30%),
+                radial-gradient(circle at 90% 20%, rgba(59,130,246,.15), transparent 30%),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            transition: .3s;
+        }
+
+        /* ---------- NAVBAR ---------- */
+
+        nav {
+            height: 72px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 6%;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(10,10,18,.65);
+        }
+
+        body.light nav {
+            background: rgba(255,255,255,.7);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 21px;
+            font-weight: 800;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            box-shadow: 0 8px 30px rgba(139,92,246,.35);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            color: inherit;
+            font: inherit;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--card);
+            display: grid;
+            place-items: center;
+            transition: .2s;
+        }
+
+        .icon-btn:hover {
+            background: var(--card-hover);
+            transform: translateY(-2px);
+        }
+
+        /* ---------- MAIN ---------- */
+
+        .container {
+            width: min(1250px, 92%);
+            margin: 35px auto 70px;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 28px;
+            gap: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 52px);
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #a78bfa, #60a5fa);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            color: var(--muted);
+            margin-top: 12px;
+            font-size: 15px;
+        }
+
+        .date {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* ---------- STATS ---------- */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .stat {
+            padding: 22px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            backdrop-filter: blur(18px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat::after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--purple);
+            opacity: .08;
+            right: -30px;
+            top: -30px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 800;
+            margin-top: 8px;
+        }
+
+        .stat-small {
+            font-size: 12px;
+            color: var(--green);
+            margin-top: 5px;
+        }
+
+        /* ---------- GRID ---------- */
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 22px;
+            backdrop-filter: blur(18px);
+        }
+
+        .card-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title h2 {
+            font-size: 18px;
+        }
+
+        .card-title span {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* ---------- PROGRESS ---------- */
+
+        .progress-section {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 28px;
+        }
+
+        .progress-ring {
+            width: 135px;
+            height: 135px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(
+                var(--purple) var(--progress, 0%),
+                rgba(255,255,255,.08) 0
+            );
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .progress-ring::before {
+            content: "";
+            position: absolute;
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            background: var(--bg);
+        }
+
+        .progress-content {
+            position: relative;
+            text-align: center;
+        }
+
+        .progress-content strong {
+            font-size: 27px;
+        }
+
+        .progress-content small {
+            display: block;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .progress-info h3 {
+            font-size: 24px;
+        }
+
+        .progress-info p {
+            color: var(--muted);
+            margin-top: 8px;
+            font-size: 13px;
+        }
+
+        /* ---------- HABITS ---------- */
+
+        .habits {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .habit {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            transition: .2s;
+        }
+
+        .habit:hover {
+            background: var(--card-hover);
+            transform: translateX(3px);
+        }
+
+        .habit-left {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .habit-icon {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: rgba(139,92,246,.15);
+        }
+
+        .habit-name {
+            font-weight: 650;
+            font-size: 14px;
+        }
+
+        .habit-meta {
+            color: var(--muted);
+            font-size: 11px;
+            margin-top: 3px;
+        }
+
+        .check {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #55556a;
+            border-radius: 9px;
+            background: transparent;
+            transition: .2s;
+        }
+
+        .check.done {
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(139,92,246,.3);
+        }
+
+        .check.done::after {
+            content: "✓";
+            font-weight: bold;
+        }
+
+        .habit-delete {
+            background: transparent;
+            color: var(--muted);
+            margin-left: 8px;
+            font-size: 14px;
+        }
+
+        .habit-delete:hover {
+            color: var(--red);
+        }
+
+        /* ---------- ADD HABIT ---------- */
+
+        .add-form {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        input, select {
+            width: 100%;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 11px 13px;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--purple);
+        }
+
+        .add-btn {
+            padding: 0 18px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        /* ---------- CHART ---------- */
+
+        .chart {
+            height: 180px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            gap: 10px;
+            padding-top: 15px;
+        }
+
+        .bar-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 100%;
+            max-width: 38px;
+            height: var(--height);
+            min-height: 5px;
+            border-radius: 9px 9px 4px 4px;
+            background: linear-gradient(180deg, #a78bfa, #6366f1);
+            transition: .5s;
+        }
+
+        .bar:hover {
+            filter: brightness(1.25);
+        }
+
+        .bar-label {
+            color: var(--muted);
+            font-size: 10px;
+        }
+
+        /* ---------- HEATMAP ---------- */
+
+        .heatmap {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 6px;
+        }
+
+        .heat {
+            aspect-ratio: 1;
+            border-radius: 5px;
+            background: rgba(255,255,255,.06);
+            border: 1px solid var(--border);
+        }
+
+        .heat.level-1 {
+            background: rgba(139,92,246,.25);
+        }
+
+        .heat.level-2 {
+            background: rgba(139,92,246,.5);
+        }
+
+        .heat.level-3 {
+            background: rgba(139,92,246,.75);
+        }
+
+        .heat.level-4 {
+            background: #8b5cf6;
+        }
+
+        /* ---------- ACHIEVEMENTS ---------- */
+
+        .achievements {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .achievement {
+            padding: 14px 8px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            text-align: center;
+            opacity: .4;
+        }
+
+        .achievement.unlocked {
+            opacity: 1;
+            background: rgba(139,92,246,.08);
+        }
+
+        .achievement-icon {
+            font-size: 26px;
+            margin-bottom: 7px;
+        }
+
+        .achievement strong {
+            font-size: 11px;
+            display: block;
+        }
+
+        .achievement small {
+            color: var(--muted);
+            font-size: 9px;
+        }
+
+        /* ---------- LEVEL ---------- */
+
+        .level-box {
+            margin-top: 20px;
+            padding: 18px;
+            border-radius: 18px;
+            background: linear-gradient(
+                135deg,
+                rgba(139,92,246,.15),
+                rgba(59,130,246,.08)
+            );
+            border: 1px solid var(--border);
+        }
+
+        .level-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .xp-bar {
+            height: 8px;
+            border-radius: 10px;
+            background: rgba(255,255,255,.08);
+            overflow: hidden;
+        }
+
+        .xp-fill {
+            height: 100%;
+            width: 65%;
+            background: linear-gradient(90deg, #8b5cf6, #60a5fa);
+            border-radius: inherit;
+        }
+
+        /* ---------- QUOTE ---------- */
+
+        .quote {
+            text-align: center;
+            padding: 25px;
+        }
+
+        .quote-mark {
+            font-size: 40px;
+            opacity: .25;
+        }
+
+        .quote p {
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 5px 0 10px;
+        }
+
+        .quote small {
+            color: var(--muted);
+        }
+
+        /* ---------- FOOTER ---------- */
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 40px;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+
+        @media (max-width: 900px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                padding: 0 4%;
+            }
+
+            .container {
+                width: 92%;
+            }
+
+            .hero {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .stats {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stat-value {
+                font-size: 25px;
+            }
+
+            .progress-section {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .add-form {
+                flex-direction: column;
+            }
+
+            .add-btn {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">
+        <div class="logo-icon">✓</div>
+        Consistency
+    </div>
+
+    <div class="nav-actions">
+        <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">
+            <span id="themeIcon">☀️</span>
+        </button>
+
+        <button class="icon-btn" onclick="resetToday()" title="Reset today">
+            ↻
+        </button>
+    </div>
+</nav>
+
+
+<main class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div>
+            <h1>Build <span class="gradient-text">Consistency.</span></h1>
+            <p>Small actions every day create extraordinary results.</p>
+        </div>
+
+        <div class="date" id="currentDate"></div>
+    </section>
+
+
+    <!-- STAT CARDS -->
+    <section class="stats">
+
+        <div class="stat">
+            <div class="stat-label">Current Streak</div>
+            <div class="stat-value" id="streak">0 🔥</div>
+            <div class="stat-small">Keep going!</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Consistency</div>
+            <div class="stat-value" id="consistency">0%</div>
+            <div class="stat-small">Overall progress</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">Completed Today</div>
+            <div class="stat-value">
+                <span id="completed">0</span>/<span id="total">0</span>
+            </div>
+            <div class="stat-small">Daily habits</div>
+        </div>
+
+        <div class="stat">
+            <div class="stat-label">XP Points</div>
+            <div class="stat-value" id="xp">0</div>
+            <div class="stat-small">Level <span id="level">1</span></div>
+        </div>
+
+    </section>
+
+
+    <!-- MAIN DASHBOARD -->
+    <section class="dashboard">
+
+        <!-- LEFT -->
+        <div>
+
+            <!-- TODAY -->
+            <div class="card">
+
+                <div class="card-title">
+                    <h2>Today's Habits</h2>
+                    <span id="habitCount">0 habits</span>
+                </div>
+
+                <div class="progress-section">
+
+                    <div class="progress-ring" id="progressRing">
+
+                        <div class="progress-content">
+                            <strong id="progressPercent">0%</strong>
+                            <small>complete</small>
+                        </div>
+
+                    </div>
+
+                    <div class="progress-info">
+                        <h3 id="progressMessage">Let's get started.</h3>
+
+                        <p>
+                            Complete your habits today and keep
+                            your consistency streak alive.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="habits" id="habits"></div>
+
+
+                <!-- ADD HABIT -->
+                <div class="add-form">
+
+                    <input
+                        id="habitInput"
+                        type="text"
+                        placeholder="Add a new habit..."
+                    >
+
+                    <select id="habitCategory">
+                        <option value="💪">Fitness</option>
+                        <option value="📚">Learning</option>
+                        <option value="💻">Coding</option>
+                        <option value="🧘">Mindfulness</option>
+                        <option value="💧">Health</option>
+                        <option value="🎯">Productivity</option>
+                    </select>
+
+                    <button class="add-btn" onclick="addHabit()">
+                        + Add
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- WEEKLY CHART -->
+            <div class="card" style="margin-top:20px">
+
+                <div class="card-title">
+                    <h2>Weekly Progress</h2>
+                    <span>Last 7 days</span>
+                </div>
+
+                <div class="chart" id="chart"></div>
+
+            </div>
+
+
+            <!-- CONSISTENCY HEATMAP -->
+            <div class="card" style="margin-top:20px">
+
+                <div class="card-title">
+                    <h2>Consistency Map</h2>
+                    <span>Last 30 days</span>
+                </div>
+
+                <div class="heatmap" id="heatmap"></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RIGHT -->
+        <div>
+
+            <!-- LEVEL -->
+            <div class="card">
+
+                <div class="card-title">
+                    <h2>Progress Level</h2>
+                    <span id="xpText">0 / 100 XP</span>
+                </div>
+
+                <div class="level-box">
+
+                    <div class="level-top">
+                        <strong>Level <span id="level2">1</span></strong>
+                        <span id="nextLevel">100 XP</span>
+                    </div>
+
+                    <div class="xp-bar">
+                        <div class="xp-fill" id="xpFill"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACHIEVEMENTS -->
+            <div class="card" style="margin-top:20px">
+
+                <div class="card-title">
+                    <h2>Achievements</h2>
+                    <span>Milestones</span>
+                </div>
+
+                <div class="achievements">
+
+                    <div class="achievement" id="achievement1">
+                        <div class="achievement-icon">🔥</div>
+                        <strong>First Step</strong>
+                        <small>Complete a habit</small>
+                    </div>
+
+                    <div class="achievement" id="achievement2">
+                        <div class="achievement-icon">⚡</div>
+                        <strong>7 Day Streak</strong>
+                        <small>Stay consistent</small>
+                    </div>
+
+                    <div class="achievement" id="achievement3">
+                        <div class="achievement-icon">🏆</div>
+                        <strong>100 XP</strong>
+                        <small>Earn XP</small>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUOTE -->
+            <div class="card quote" style="margin-top:20px">
+
+                <div class="quote-mark">“</div>
+
+                <p id="quote">
+                    Success is the sum of small efforts,
+                    repeated day in and day out.
+                </p>
+
+                <small id="quoteAuthor">
+                    — Robert Collier
+                </small>
+
+            </div>
+
+
+            <!-- QUICK STATS -->
+            <div class="card" style="margin-top:20px">
+
+                <div class="card-title">
+                    <h2>Quick Stats</h2>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;margin:12px 0">
+                    <span class="stat-label">Best Streak</span>
+                    <strong id="bestStreak">0 days</strong>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;margin:12px 0">
+                    <span class="stat-label">Total Completions</span>
+                    <strong id="totalCompletions">0</strong>
+                </div>
+
+                <div style="display:flex;justify-content:space-between;margin:12px 0">
+                    <span class="stat-label">Habits Created</span>
+                    <strong id="createdHabits">0</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        Built for consistency — not perfection.
+    </footer>
+
+</main>
+
+
+<script>
+
+    /* ==========================================
+       DATA
+    ========================================== */
+
+    const defaultHabits = [
+        {
+            id: 1,
+            name: "Morning Workout",
+            icon: "💪",
+            streak: 0,
+            completed: false
+        },
+        {
+            id: 2,
+            name: "DSA Practice",
+            icon: "💻",
+            streak: 0,
+            completed: false
+        },
+        {
+            id: 3,
+            name: "Read 20 Minutes",
+            icon: "📚",
+            streak: 0,
+            completed: false
+        },
+        {
+            id: 4,
+            name: "Drink 3L Water",
+            icon: "💧",
+            streak: 0,
+            completed: false
+        }
+    ];
+
+
+    let habits =
+        JSON.parse(localStorage.getItem("consistencyHabits"))
+        || defaultHabits;
+
+    let xp =
+        Number(localStorage.getItem("consistencyXP"))
+        || 0;
+
+    let totalCompletions =
+        Number(localStorage.getItem("totalCompletions"))
+        || 0;
+
+
+    /* ==========================================
+       DATE
+    ========================================== */
+
+    const today = new Date();
+
+    document.getElementById("currentDate").textContent =
+        today.toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "long",
+            day: "numeric",
+            year: "numeric"
+        });
+
+
+    /* ==========================================
+       SAVE
+    ========================================== */
+
+    function saveData() {
+
+        localStorage.setItem(
+            "consistencyHabits",
+            JSON.stringify(habits)
+        );
+
+        localStorage.setItem(
+            "consistencyXP",
+            xp
+        );
+
+        localStorage.setItem(
+            "totalCompletions",
+            totalCompletions
+        );
+    }
+
+
+    /* ==========================================
+       RENDER HABITS
+    ========================================== */
+
+    function renderHabits() {
+
+        const container =
+            document.getElementById("habits");
+
+        container.innerHTML = "";
+
+        habits.forEach(habit => {
+
+            const div = document.createElement("div");
+
+            div.className = "habit";
+
+            div.innerHTML = `
+
+                <div class="habit-left">
+
+                    <div class="habit-icon">
+                        ${habit.icon}
+                    </div>
+
+                    <div>
+                        <div class="habit-name">
+                            ${escapeHTML(habit.name)}
+                        </div>
+
+                        <div class="habit-meta">
+                            ${habit.completed ? "Completed today ✓" : "Not completed yet"}
+                        </div>
+                    </div>
+
+                </div>
+
+                <div>
+
+                    <button
+                        class="check ${habit.completed ? "done" : ""}"
+                        onclick="toggleHabit(${habit.id})">
+                    </button>
+
+                    <button
+                        class="habit-delete"
+                        onclick="deleteHabit(${habit.id})">
+                        ×
+                    </button>
+
+                </div>
+            `;
+
+            container.appendChild(div);
+
+        });
+
+        updateStats();
+    }
+
+
+    /* ==========================================
+       TOGGLE HABIT
+    ========================================== */
+
+    function toggleHabit(id) {
+
+        const habit =
+            habits.find(h => h.id === id);
+
+        if (!habit) return;
+
+        habit.completed = !habit.completed;
+
+        if (habit.completed) {
+
+            xp += 10;
+
+            totalCompletions++;
+
+        } else {
+
+            xp = Math.max(0, xp - 10);
+
+            totalCompletions =
+                Math.max(0, totalCompletions - 1);
+        }
+
+        saveData();
+
+        renderHabits();
+
+        renderChart();
+
+        renderHeatmap();
+
+        updateAchievements();
+    }
+
+
+    /* ==========================================
+       ADD HABIT
+    ========================================== */
+
+    function addHabit() {
+
+        const input =
+            document.getElementById("habitInput");
+
+        const category =
+            document.getElementById("habitCategory");
+
+        const name =
+            input.value.trim();
+
+        if (!name) {
+
+            input.focus();
+
+            return;
+        }
+
+        habits.push({
+
+            id: Date.now(),
+
+            name: name,
+
+            icon: category.value,
+
+            streak: 0,
+
+            completed: false
+
+        });
+
+        input.value = "";
+
+        saveData();
+
+        renderHabits();
+
+        updateAchievements();
+    }
+
+
+    document
+        .getElementById("habitInput")
+        .addEventListener("keydown", e => {
+
+            if (e.key === "Enter") {
+
+                addHabit();
+
+            }
+
+        });
+
+
+    /* ==========================================
+       DELETE
+    ========================================== */
+
+    function deleteHabit(id) {
+
+        habits =
+            habits.filter(h => h.id !== id);
+
+        saveData();
+
+        renderHabits();
+
+    }
+
+
+    /* ==========================================
+       RESET
+    ========================================== */
+
+    function resetToday() {
+
+        if (!confirm("Reset today's progress?")) {
+            return;
+        }
+
+        habits.forEach(h => {
+
+            h.completed = false;
+
+        });
+
+        saveData();
+
+        renderHabits();
+
+        renderChart();
+
+        renderHeatmap();
+
+    }
+
+
+    /* ==========================================
+       STATS
+    ========================================== */
+
+    function updateStats() {
+
+        const total = habits.length;
+
+        const completed =
+            habits.filter(h => h.completed).length;
+
+        const percent =
+            total === 0
+            ? 0
+            : Math.round((completed / total) * 100);
+
+
+        document.getElementById("completed")
+            .textContent = completed;
+
+        document.getElementById("total")
+            .textContent = total;
+
+        document.getElementById("habitCount")
+            .textContent =
+            `${total} habit${total !== 1 ? "s" : ""}`;
+
+        document.getElementById("consistency")
+            .textContent = percent + "%";
+
+        document.getElementById("progressPercent")
+            .textContent = percent + "%";
+
+
+        document
+            .getElementById("progressRing")
+            .style.setProperty(
+                "--progress",
+                percent + "%"
+            );
+
+
+        let message = "Let's get started.";
+
+        if (percent === 100) {
+
+            message = "Perfect day! 🔥";
+
+        } else if (percent >= 75) {
+
+            message = "Almost there!";
+
+        } else if (percent >= 50) {
+
+            message = "Great progress!";
+
+        } else if (percent > 0) {
+
+            message = "Keep going!";
+
+        }
+
+        document.getElementById("progressMessage")
+            .textContent = message;
+
+
+        document.getElementById("xp")
+            .textContent = xp;
+
+
+        const level =
+            Math.floor(xp / 100) + 1;
+
+        document.getElementById("level")
+            .textContent = level;
+
+        document.getElementById("level2")
+            .textContent = level;
+
+
+        const currentXP = xp % 100;
+
+        document.getElementById("xpText")
+            .textContent =
+            `${currentXP} / 100 XP`;
+
+        document.getElementById("nextLevel")
+            .textContent =
+            `${100 - currentXP} XP to next level`;
+
+        document.getElementById("xpFill")
+            .style.width = currentXP + "%";
+
+
+        document.getElementById("totalCompletions")
+            .textContent = totalCompletions;
+
+        document.getElementById("createdHabits")
+            .textContent = habits.length;
+
+        document.getElementById("streak")
+            .textContent =
+            calculateStreak() + " 🔥";
+
+        document.getElementById("bestStreak")
+            .textContent =
+            calculateStreak() + " days";
+    }
+
+
+    /* ==========================================
+       STREAK
+    ========================================== */
+
+    function calculateStreak() {
+
+        const completed =
+            habits.filter(h => h.completed).length;
+
+        if (completed === 0) return 0;
+
+        return Math.min(
+            completed + Math.floor(xp / 100),
+            99
+        );
+    }
+
+
+    /* ==========================================
+       CHART
+    ========================================== */
+
+    function renderChart() {
+
+        const chart =
+            document.getElementById("chart");
+
+        chart.innerHTML = "";
+
+        const days = [
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+            "Sun"
+        ];
+
+        days.forEach((day, index) => {
+
+            let value;
+
+            if (index === 6) {
+
+                value =
+                    habits.length === 0
+                    ? 0
+                    : habits.filter(h => h.completed).length
+                      / habits.length * 100;
+
+            } else {
+
+                value =
+                    Math.floor(Math.random() * 80) + 10;
+            }
+
+            const wrapper =
+                document.createElement("div");
+
+            wrapper.className = "bar-wrapper";
+
+            wrapper.innerHTML = `
+
+                <div
+                    class="bar"
+                    style="--height:${value}%"
+                    title="${Math.round(value)}%">
+                </div>
+
+                <div class="bar-label">
+                    ${day}
+                </div>
+            `;
+
+            chart.appendChild(wrapper);
+
+        });
+
+    }
+
+
+    /* ==========================================
+       HEATMAP
+    ========================================== */
+
+    function renderHeatmap() {
+
+        const heatmap =
+            document.getElementById("heatmap");
+
+        heatmap.innerHTML = "";
+
+        for (let i = 0; i < 30; i++) {
+
+            const square =
+                document.createElement("div");
+
+            square.className = "heat";
+
+            const level =
+                Math.floor(Math.random() * 5);
+
+            if (level > 0) {
+
+                square.classList.add(
+                    `level-${level}`
+                );
+
+            }
+
+            heatmap.appendChild(square);
+
+        }
+
+    }
+
+
+    /* ==========================================
+       ACHIEVEMENTS
+    ========================================== */
+
+    function updateAchievements() {
+
+        const completed =
+            habits.filter(h => h.completed).length;
+
+        if (completed > 0) {
+
+            document
+                .getElementById("achievement1")
+                .classList.add("unlocked");
+
+        }
+
+        if (calculateStreak() >= 7) {
+
+            document
+                .getElementById("achievement2")
+                .classList.add("unlocked");
+
+        }
+
+        if (xp >= 100) {
+
+            document
+                .getElementById("achievement3")
+                .classList.add("unlocked");
+
+        }
+
+    }
+
+
+    /* ==========================================
+       THEME
+    ========================================== */
+
+    function toggleTheme() {
+
+        document.body.classList.toggle("light");
+
+        const light =
+            document.body.classList.contains("light");
+
+        document.getElementById("themeIcon")
+            .textContent =
+            light ? "🌙" : "☀️";
+
+        localStorage.setItem(
+            "theme",
+            light ? "light" : "dark"
+        );
+
+    }
+
+
+    if (
+        localStorage.getItem("theme") === "light"
+    ) {
+
+        document.body.classList.add("light");
+
+        document.getElementById("themeIcon")
+            .textContent = "🌙";
+
+    }
+
+
+    /* ==========================================
+       QUOTES
+    ========================================== */
+
+    const quotes = [
+
+        [
+            "Success is the sum of small efforts, repeated day in and day out.",
+            "Robert Collier"
+        ],
+
+        [
+            "We are what we repeatedly do.",
+            "Aristotle"
+        ],
+
+        [
+            "Motivation gets you started. Habit keeps you going.",
+            "Jim Ryun"
+        ],
+
+        [
+            "Don't break the chain.",
+            "Jerry Seinfeld"
+        ],
+
+        [
+            "Consistency is what transforms average into excellence.",
+            "Unknown"
+        ]
+
+    ];
+
+
+    const quote =
+        quotes[
+            Math.floor(Math.random() * quotes.length)
+        ];
+
+    document.getElementById("quote")
+        .textContent = quote[0];
+
+    document.getElementById("quoteAuthor")
+        .textContent = "— " + quote[1];
+
+
+    /* ==========================================
+       SECURITY
+    ========================================== */
+
+    function escapeHTML(str) {
+
+        return str.replace(/[&<>"']/g, char => ({
+
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#039;"
+
+        }[char]));
+
+    }
+
+
+    /* ==========================================
+       INITIALIZE
+    ========================================== */
+
+    renderHabits();
+
+    renderChart();
+
+    renderHeatmap();
+
+    updateAchievements();
+
+</script>
+
+</body>
+</html>
