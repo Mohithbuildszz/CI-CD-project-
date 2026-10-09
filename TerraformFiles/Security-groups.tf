@@ -1,26 +1,27 @@
 
 # Security group vanthu oru Security gaurd matharii we used to Connect with ec2
 resource "aws_security_group" "sg" {
-  name="project-pep-sg"
-  description="Security group for Project PEP"
+  name        = "project-pep-sg-v2"
+  vpc_id      = aws_vpc.vpc.id
+  description = "Security group for Project PEP"
   # SSH 
   ingress {
-    description="SSH"
-    from_port=22
-    to_port= 22
-    protocol= "tcp"
-    cidr_blocks=["0.0.0.0/0"]
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # HTTP  Access website
-  ingress{
+  ingress {
     description = "HTTP"
-    from_port= 80
-    to_port= 80
-    protocol="tcp"
-    cidr_blocks=["0.0.0.0/0"]
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
-   # HTTPS - Add when HTTPS is configured
+  # HTTPS - Add when HTTPS is configured
   ingress {
     description = "HTTPS"
     from_port   = 443
@@ -32,20 +33,20 @@ resource "aws_security_group" "sg" {
   # Application
   ingress {
     description = "Application"
-    from_port= 8080
-    to_port = 8080
-    protocol= "tcp"
-    cidr_blocks=["0.0.0.0/0"]
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   # Outbound
   egress {
     description = "Allow all outbound traffic"
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = "Project-PEP-SG"
+    Name = "Project-PEP-SG-v2"
   }
 }
